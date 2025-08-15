@@ -20,6 +20,10 @@ Formato: GeoPackage
 Sistema de Referencia Geodésico: ETRS89 en la Península
 ```
 
+Download into the `siose2osm/data` directory and unzip.
+Move the file `18_GRANADA.gpkg` to `siose2osm/data` and remove .zip and other content.
+The `siose2osm/data` dir is where we work in. This is also ignored by git.
+
 ## Open GeoPackage for Municipality in QGIS and Download Layer
 
 <img width="1226" height="775" alt="image" src="docs/src/assets/images/qgis-siose.jpg" />
@@ -31,8 +35,8 @@ Layers:
 * `18_GRANADA — SAR_18_T_USOS` is less useful (Landuse).
 
 Download a Canvas area into a GPKG for `18_GRANADA — SAR_18_T_COMBINADA`, reproject to EPSG:4326 (WGS84).
-TODO: could be done woth `ogr2ogr`.
-Filename: `polygonos-greater-valor.gpkg` 
+BUT NOW DONE WITH DONE WITH `ogr2ogr` with [extract.sh](siose2osm/extract.sh) Bash script (see next)!
+But you can still download an area in QGIS.
 
 ## Documentation
 
@@ -46,16 +50,18 @@ Excerpt:
 
 ## Use ogr2ogr to extract single Municipality
 
-An `extract.sh` script can extract a single municipality from a province GeoPackage together with styles.
+An [extract.sh](siose2osm/extract.sh) script can extract a single municipality from a province GeoPackage together with styles.
 This provides more automation, as QGIS is not required. We use here for inspection. The municipality of Válor (18187) in Province Granada (18).
 
-`./extract.sh 18_GRANADA.gpkg 18187`
+`./extract.sh data/18_GRANADA.gpkg 18187`
 
-This results in the GPKG file `18187.gpkg` with a single Layer `SAR_18_T_COMBINADA` which can be viewed with styles in QGIS.
+This results in the GPKG file `data/18187.gpkg` with a single Layer `SAR_18_T_COMBINADA` which can be viewed with styles in QGIS.
 
 <img alt="image" src="docs/src/assets/images/qgis-siose-overview.jpg" />
 
 ## Make a CSV mapping file with OSM tags for ID_COBERTURA_MAX
+
+See [mapping.csv](siose2osm/mapping.csv).
 
 ```
 src_ID_COBERTURA_MAX;COBERTURA_DESC_ES;COBERTURA_DESC_EN;osm_landuse;osm_natural;osm_landcover;osm_trees;osm_leaf_type;osm_leaf_cycle;osm_meadow
@@ -95,7 +101,7 @@ etc
 
 [ogr2osm](https://github.com/roelderickx/ogr2osm) allows for "Translators", custom Python plugins that can be provided at execution time. I attempt to make a generic translator plugin that reads a mapping CSV file with column-naming conventions to steer mapping to OSM-tags. BTW [ogr2osm](https://wiki.openstreetmap.org/wiki/Ogr2osm) was created originally by [Iván Sánchez Ortega](https://ivan.sanchezortega.es/).
 
-- input csv mapping.csv
+- input csv [mapping.csv](siose2osm/mapping.csv)
 - must have a column 'src_' prepended to unique source attr name, e.g. src_ID_COBERTURA_MAX
 - must have one or more 'osm_' column names denoting OSM-tags, may be empty
 
@@ -112,7 +118,7 @@ src_ID_COBERTURA_MAX;COBERTURA_DESC_ES;COBERTURA_DESC_EN;osm_landuse;osm_natural
 313;Frondosas perennifolias;Evergreen broadleaved;;wood;trees;;broadleaved;evergreen;
 ```
 
-The `mapping.py` class `CSVMappingTranslation` will create an inner lookup `dict` of `dicts` with `src_ID_COBERTURA_MAX` as
+The [mapping.py](siose2osm/mapping.py) class `CSVMappingTranslation` will create an inner lookup `dict` of `dicts` with `src_ID_COBERTURA_MAX` as
 key. The value is the set of OSM-tags (stripped of `osm_` prefixes.
 
 Code snippet:
@@ -162,9 +168,10 @@ class CSVMappingTranslation(ogr2osm.TranslationBase):
 ```
 ## ogr2osm with Docker
 
-```
-docker run -ti --rm -w "/app" -v $(pwd):/app roelderickx/ogr2osm -t mapping.py --force --suppress-empty-tags /app/polygonos-greater-valor.gpkg -o /app/valor-lc.osm
-```
+Create the `.osm` file from the municipality `.gpkg`.
+Command `./ogr2osm.sh <GPKG File> <OSM File>`, for example `./ogr2osm.sh data/18187.gpkg data/18187.osm`.
+
+See [ogr2osm.sh](siose2osm/ogr2osm.sh).
 
 ## Resulting .osm file
 
