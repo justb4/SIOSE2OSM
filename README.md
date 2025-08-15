@@ -22,7 +22,7 @@ Sistema de Referencia Geodésico: ETRS89 en la Península
 
 ## Open GeoPackage for Municipality in QGIS and Download Layer
 
-<img width="1226" height="775" alt="image" src="https://gist.github.com/user-attachments/assets/cf978fb9-88a8-44f6-b349-71318612b8cc" />
+<img width="1226" height="775" alt="image" src="docs/src/assets/images/qgis-siose.jpg" />
 
 Layers: 
 
@@ -42,7 +42,7 @@ Filename: `polygonos-greater-valor.gpkg`
 
 Excerpt:
 
-<img width="899" height="1179" alt="image" src="https://gist.github.com/user-attachments/assets/1aacea02-65da-4ce8-8298-731731c755fa" />
+<img alt="image" src="docs/src/assets/images/siose-codes.png" />
 
 ## Use ogr2ogr to extract single Municipality
 
@@ -53,7 +53,7 @@ This provides more automation, as QGIS is not required. We use here for inspecti
 
 This results in the GPKG file `18187.gpkg` with a single Layer `SAR_18_T_COMBINADA` which can be viewed with styles in QGIS.
 
-<img width="1198" height="855" alt="image" src="https://gist.github.com/user-attachments/assets/6e10d78c-e649-43ca-b9d9-ae3013f4f085" />
+<img alt="image" src="docs/src/assets/images/qgis-siose-overview.jpg" />
 
 ## Make a CSV mapping file with OSM tags for ID_COBERTURA_MAX
 
@@ -185,4 +185,4 @@ Useful baselayers:
 
 Result in JOSM (note that we select the same polygon as in the QGIS screenshot above!):
 
-<img width="1200" height="998" alt="image" src="https://gist.github.com/user-attachments/assets/d0e013f1-3072-44ff-8b61-c63b2faa69d4" />
+<img width="1200" height="998" alt="image" src="docs/src/assets/images/josm-first-translate.jpg" />
