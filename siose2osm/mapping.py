@@ -31,7 +31,7 @@ class CSVMappingTranslation(ogr2osm.TranslationBase):
 
         # Read CSV.
         with open("mapping.csv", newline="", encoding="utf-8") as f:
-            reader = csv.DictReader(f, delimiter=";")
+            reader = csv.DictReader(f, delimiter=",")
             rows = list(reader)
 
         # Find the column whose name starts with 'src_'
