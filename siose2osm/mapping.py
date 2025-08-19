@@ -3,23 +3,23 @@
 '''
 Translation rules for the generic CSV Mapping.
 
-Copyright 2025 Just van den Broecke. GPL v4.
+Copyright 2025 Just van den Broecke. GNU GPL v4.
 
 - input csv mapping.csv
 - must have a column 'src_' prepended to unique source attr name, e.g. src_ID_COBERTURA_MAX
 - must have one or more 'osm_' column names denoting OSM-tags, may be empty
+- 'osm_skip' is special column: when value is 'X', skip the SIOSE record
 
 Example
-src_ID_COBERTURA_MAX;COBERTURA_DESC_ES;COBERTURA_DESC_EN;osm_landuse;osm_natural;osm_landcover;osm_trees;osm_leaf_type;osm_leaf_cycle;osm_meadow
-101;Edificación;Buildings;;;;;;;
+src_ID_COBERTURA_MAX,COBERTURA_DESC_ES,COBERTURA_DESC_EN,osm_skip,osm_source,osm_landuse,osm_natural,osm_landcover,osm_leisure,osm_trees,osm_leaf_type,osm_leaf_cycle,osm_meadow,osm_water,osm_wetland
+101,Edificación,Buildings,X,SIOSE,,,,,,,,,,
+102,Zona verde artificial y arbolado urbano,Artificial green areas and urban trees,,SIOSE,village_green,,,,,,,,,
 .
-300;Pastizal;Grassland;meadow;;;;;;
-301;Pastizal-matorral;Grassland-scrubland;meadow;;;;;;
-302;Pasto arbolado;Wooded pasture;;wood;trees;;;;
-310;Arbolado;Trees;;wood;trees;;;;
-312;Frondosas caducifolias;Deciduous broadleaved;;wood;trees;;broadleaved;deciduous;
-313;Frondosas perennifolias;Evergreen broadleaved;;wood;trees;;broadleaved;evergreen;
-
+200,Cultivos,Crops,,SIOSE,farmland,,,,,,,,,
+210,Cultivos herbáceos,Arable crops,,SIOSE,farmland,,,,,,,,,
+222,Frutales cítricos,Citrus fruit trees,,SIOSE,orchard,,,,orange_trees,,,,,
+.
+.
 '''
 
 import ogr2osm

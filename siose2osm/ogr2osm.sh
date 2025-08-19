@@ -1,5 +1,6 @@
 #!/bin/bash
 # Convert a Geopackage file to a .osm file.
+# Copyright 2025 Just van den Broecke. GNU GPL v4.
 # Usage: ./ogr2osm.sh <GPKG File> <OSM File>
 # For example Válor in Granada Prov:
 # ./ogr2osm.sh data/18187.gpkg data/18187.osm

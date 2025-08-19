@@ -1,5 +1,7 @@
 #!/bin/bash
 # Extract single municipality Landcover "T_COMBINADA" from SIOSE GPKG
+# Copyright 2025 Just van den Broecke. GNU GPL v4.
+#
 # Usage: ./extract.sh GPKG <5-digit municipality nr>
 # For example Válor in Granada Prov:
 # ./extract.sh 18_GRANADA.gpkg 18187
