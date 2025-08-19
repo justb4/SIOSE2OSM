@@ -1,7 +1,7 @@
 # PoC - Workflow importing SIOSE Landcover in OSM
 
 This is a PoC (Proof of Concept) to test the feasiblity to establish a basic workflow for import of Spain's Landcover dataset , "SIOSE AR" (Alto Reso, hi-res, scale 1:1000-1:5000m) from SIOSE into OpenStreetMap. 
-The outcome and cotnent of this repository is basically a toolchain `SIOSE2OSM` that takes raw SIOSE data and extracts, translates to per-municipality OSM-files (`.osm`) to be opened in JOSM.
+The outcome and content of this repository is basically a toolchain `SIOSE2OSM` that takes raw SIOSE data and extracts, translates to per-municipality OSM-files (`.osm`) to be opened in JOSM.
 
 *NB this process is not yet executed, need discussion and refinement with the OSM-ES Community, SIOSE (for licensing waiver) and OSM DWG for import permission.*
 
@@ -193,6 +193,7 @@ Useful baselayers:
 
 * wms_endpoint:https://servicios.idee.es/wms-inspire/ocupacion-suelo?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities
 * PNOA (Aerial Imagery Spain)
+* Tip: open this file first in JOSM to have all the useful layers present: [josm-siose-starter.jos](siose2osm/josm-siose-starter.jos)
 
 Result in JOSM (note that we select the same polygon as in the QGIS screenshot above!):
 
