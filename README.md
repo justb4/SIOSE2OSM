@@ -197,4 +197,4 @@ Useful baselayers:
 
 Result in JOSM (note that we select the same polygon as in the QGIS screenshot above!):
 
-<img width="1200" height="998" alt="image" src="docs/src/assets/images/josm-first-translate.jpg" />
+<img width="1488" height="936" alt="image" src="docs/src/assets/images/josm-load-osm.jpg" />
