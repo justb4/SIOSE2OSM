@@ -1,4 +1,5 @@
 *.gpkg
+*.gpkg-wal
 *.osm
 *.zip
 

@@ -1,6 +1,7 @@
 # PoC - Workflow importing SIOSE Landcover in OSM
 
 This is a PoC (Proof of Concept) to test the feasiblity to establish a basic workflow for import of Spain's Landcover dataset , "SIOSE AR" (Alto Reso, hi-res, scale 1:1000-1:5000m) from SIOSE into OpenStreetMap. 
+The outcome and cotnent of this repository is basically a toolchain `SIOSE2OSM` that takes raw SIOSE data and extracts, translates to per-municipality OSM-files (`.osm`) to be opened in JOSM.
 
 *NB this process is not yet executed, need discussion and refinement with the OSM-ES Community, SIOSE (for licensing waiver) and OSM DWG for import permission.*
 
@@ -63,74 +64,69 @@ This results in the GPKG file `data/18187.gpkg` with a single Layer `SAR_18_T_CO
 
 See [mapping.csv](siose2osm/mapping.csv).
 
+Conventions in file:
+* `src_*` denotes the source key for mapping, here `src_ID_COBERTURA_MAX` denotes the `ID_COBERTURA_MAX` Landcover SIOSE value
+* `osm_*` denotes OSM tags to be assigned for `ID_COBERTURA_MAX`
+* `osm_skip` has special meaning: skip any entry with that `ID_COBERTURA_MAX`
+
+For now we only take mostly "natural" terrain values:
+
+* no road and transport areas
+* no water features
+* no human-made constructions: houses and other
+* no "Zona abierta" i.e. "Open areas"
+
+Note that `natural` and `landcover` when in use, are both assigned.
+
 ```
-src_ID_COBERTURA_MAX;COBERTURA_DESC_ES;COBERTURA_DESC_EN;osm_landuse;osm_natural;osm_landcover;osm_trees;osm_leaf_type;osm_leaf_cycle;osm_meadow
-101;Edificación;Buildings;;;;;;;
-102;Zona verde artificial y arbolado urbano;Artificial green areas and urban trees;;;;;;;
-104;Zonas pavimentadas o selladas;Paved or sealed areas;;;;;;;
-105;Piscina;Swimming pool;;;;;;;
+src_ID_COBERTURA_MAX,COBERTURA_DESC_ES,COBERTURA_DESC_EN,osm_skip,osm_source,osm_landuse,osm_natural,osm_landcover,osm_leisure,osm_trees,osm_leaf_type,osm_leaf_cycle,osm_meadow,osm_water,osm_wetland
+101,Edificación,Buildings,X,SIOSE,,,,,,,,,,
+102,Zona verde artificial y arbolado urbano,Artificial green areas and urban trees,,SIOSE,village_green,,,,,,,,,
 .
 .
-232;Olivar;Olive grove;orchard;;;olive_trees;;;
-241;Otros cultivos permanentes;Other permanent crops;farmland;;;;;;
-251;Viñedo-olivar;Vineyard-olive grove;orchard;;;;;;
-252;Viñedo-frutal;Vineyard-fruit tree;orchard;;;;;;
-253;Frutos secos y viñedo;Nuts and vineyard;orchard;;;;;;
-254;Asociación cítricos-viñedo;Citrus-vineyard association;orchard;;;;;;
-255;Frutos secos y olivar;Nuts and olive grove;orchard;;;;;;
-256;Olivar-frutal;Olive grove-fruit tree;orchard;;;;;;
-257;Asociación olivar-cítricos;Olive grove-citrus tree association;orchard;;;;;;
-258;Asociación cítricos-frutales;Citrus-fruit tree association;orchard;;;;;;
-259;Asociación cítricos-frutales de cáscara;Citrus-nut tree association;orchard;;;;;;
-260;Asociación frutales-frutales de cáscara;Fruit tree-nut tree association Shell;orchard;;;;;;
-280;Huerta;Orchard;orchard;;;;;;
-290;Prados;Meadows;meadow;;;;;;pasture
-300;Pastizal;Grassland;meadow;;;;;;
-301;Pastizal-matorral;Grassland-scrubland;meadow;;;;;;
-302;Pasto arbolado;Wooded pasture;;wood;trees;;;;
-310;Arbolado;Trees;;wood;trees;;;;
-312;Frondosas caducifolias;Deciduous broadleaved;;wood;trees;;broadleaved;deciduous;
-313;Frondosas perennifolias;Evergreen broadleaved;;wood;trees;;broadleaved;evergreen;
-316;Coníferas;Conifers;;wood;trees;;needleleaved;;
-320;Matorral;Scrubland;;scrub;scrub;;;;
+200,Cultivos,Crops,,SIOSE,farmland,,,,,,,,,
+210,Cultivos herbáceos,Arable crops,,SIOSE,farmland,,,,,,,,,
+222,Frutales cítricos,Citrus fruit trees,,SIOSE,orchard,,,,orange_trees,,,,,
+223,Frutales no cítricos,Non-citrus fruit trees,,SIOSE,orchard,,,,,,,,,
+224,Frutos secos,Nuts,,SIOSE,orchard,,,,,,,,,
+231,Viñedo,Vineyard,,SIOSE,vineyard,,,,,,,,,
+232,Olivar,Olive grove,,SIOSE,orchard,,,,olive_trees,,,,,
+241,Otros cultivos permanentes,Other permanent crops,,SIOSE,farmland,,,,,,,,,
+.
+.
+514,Embalses,Reservoirs,X,SIOSE,,water,water,,,,,,basin,
+515,Canales,Canals,X,SIOSE,,water,water,,,,,,,
+522,Estuarios,Estuaries,X,SIOSE,,water,water,,,,,,,
+523,Mares y océanos,Seas and oceans,X,SIOSE,,water,water,,,,,,,
+999,Desconocido,Unknown,X,SIOSE,,,,,,,,,,
 ```
 
 etc
 
 ## Create a generic CSV-based Translator for ogr2osm
 
-[ogr2osm](https://github.com/roelderickx/ogr2osm) allows for "Translators", custom Python plugins that can be provided at execution time. I attempt to make a generic translator plugin that reads a mapping CSV file with column-naming conventions to steer mapping to OSM-tags. BTW [ogr2osm](https://wiki.openstreetmap.org/wiki/Ogr2osm) was created originally by [Iván Sánchez Ortega](https://ivan.sanchezortega.es/).
+[ogr2osm](https://github.com/roelderickx/ogr2osm) allows for "Translators", custom Python plugins that can be provided at execution time. 
+I attempt to make a generic translator plugin that reads a mapping CSV file with column-naming conventions to steer mapping to OSM-tags. 
+BTW [ogr2osm](https://wiki.openstreetmap.org/wiki/Ogr2osm) was created originally by [Iván Sánchez Ortega](https://ivan.sanchezortega.es/).
 
-- input csv [mapping.csv](siose2osm/mapping.csv)
+- input CSV [mapping.csv](siose2osm/mapping.csv) (see above)
 - must have a column 'src_' prepended to unique source attr name, e.g. src_ID_COBERTURA_MAX
 - must have one or more 'osm_' column names denoting OSM-tags, may be empty
+- `osm_skip=X` denotes that this entry (polygon) should be skipped
 
-```
-Example
-src_ID_COBERTURA_MAX;COBERTURA_DESC_ES;COBERTURA_DESC_EN;osm_landuse;osm_natural;osm_landcover;osm_trees;osm_leaf_type;osm_leaf_cycle;osm_meadow
-101;Edificación;Buildings;;;;;;;
-.
-300;Pastizal;Grassland;meadow;;;;;;
-301;Pastizal-matorral;Grassland-scrubland;meadow;;;;;;
-302;Pasto arbolado;Wooded pasture;;wood;trees;;;;
-310;Arbolado;Trees;;wood;trees;;;;
-312;Frondosas caducifolias;Deciduous broadleaved;;wood;trees;;broadleaved;deciduous;
-313;Frondosas perennifolias;Evergreen broadleaved;;wood;trees;;broadleaved;evergreen;
-```
+In [mapping.py](siose2osm/mapping.py) the class `CSVMappingTranslation` will create an inner lookup `dict` of `dicts` with `src_ID_COBERTURA_MAX` as
+key. The value is the set of OSM-tags prefixed with `osm_`.
 
-The [mapping.py](siose2osm/mapping.py) class `CSVMappingTranslation` will create an inner lookup `dict` of `dicts` with `src_ID_COBERTURA_MAX` as
-key. The value is the set of OSM-tags (stripped of `osm_` prefixes.
-
-Code snippet:
+Code snippet (see [mapping.py](siose2osm/mapping.py) for current version):
 
 ```python
 class CSVMappingTranslation(ogr2osm.TranslationBase):
 
     def __init__(self):
 
-        # Read CSV (adjust delimiter as needed)
+        # Read CSV.
         with open("mapping.csv", newline="", encoding="utf-8") as f:
-            reader = csv.DictReader(f, delimiter=";")
+            reader = csv.DictReader(f, delimiter=",")
             rows = list(reader)
 
         # Find the column whose name starts with 'src_'
@@ -152,6 +148,8 @@ class CSVMappingTranslation(ogr2osm.TranslationBase):
             }
             self.lookup_dict[key] = inner_dict
 
+        print('CSVMappingTranslation: __init__ done')
+
     def filter_tags(self, attrs):
         if not attrs:
             return
@@ -160,18 +158,24 @@ class CSVMappingTranslation(ogr2osm.TranslationBase):
 
         if self.src_attr in attrs:
             tags = self.lookup_dict[attrs[self.src_attr]]
-            # Add original source id value that is mapped
-            tags['ref:src_id'] = attrs[self.src_attr]
+            if tags.get('skip') == 'X':
+                # print('Skipping tags %s' % tags)
+                return
+            # Add original source value that is mapped
+            tags['ref:src_val'] = attrs[self.src_attr]
 
         return tags
-
 ```
+
 ## ogr2osm with Docker
 
 Create the `.osm` file from the municipality `.gpkg`.
 Command `./ogr2osm.sh <GPKG File> <OSM File>`, for example `./ogr2osm.sh data/18187.gpkg data/18187.osm`.
+Uses the [mapping.csv](siose2osm/mapping.csv) file (fixed name for now).
 
-See [ogr2osm.sh](siose2osm/ogr2osm.sh).
+See [ogr2osm.sh](siose2osm/ogr2osm.sh). This script calls the [Docker Image roelderickx/ogr2osm](https://github.com/roelderickx/ogr2osm/blob/main/Dockerfile).
+
+We call within the `git/siose2osm` directory: `./ogr2osm.sh data/18187.gpkg data/18187.osm` as the data files are under `data/`.
 
 ## Resulting .osm file
 

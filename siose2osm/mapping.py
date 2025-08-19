@@ -53,6 +53,8 @@ class CSVMappingTranslation(ogr2osm.TranslationBase):
             }
             self.lookup_dict[key] = inner_dict
 
+        print('CSVMappingTranslation: __init__ done')
+
     def filter_tags(self, attrs):
         if not attrs:
             return
@@ -61,6 +63,9 @@ class CSVMappingTranslation(ogr2osm.TranslationBase):
 
         if self.src_attr in attrs:
             tags = self.lookup_dict[attrs[self.src_attr]]
+            if tags.get('skip') == 'X':
+                # print('Skipping tags %s' % tags)
+                return
             # Add original source value that is mapped
             tags['ref:src_val'] = attrs[self.src_attr]
 
