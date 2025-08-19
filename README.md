@@ -4,6 +4,7 @@ This is a PoC (Proof of Concept) to test the feasiblity to establish a basic wor
 The outcome and content of this repository is basically a toolchain `SIOSE2OSM` that takes raw SIOSE data and extracts, translates to per-municipality OSM-files (`.osm`) to be opened in JOSM.
 
 *NB this process is not yet executed, need discussion and refinement with the OSM-ES Community, SIOSE (for licensing waiver) and OSM DWG for import permission.*
+*See [proposal on OSM-ES Forum](https://community.openstreetmap.org/t/uso-de-siose-landuse-landcover-para-openstreetmap/134392/1).*
 
 ## Source data (GPKG per province)
 
