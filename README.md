@@ -225,16 +225,32 @@ and always match with PNOA Aerial Imagery, i.e. what you see on the ground.
 
 This is a workflow I have followed after some experimentation:
 
-1. look on the map (OSM Carto) and PNOA Aerial for some polygons bordering each other, select these, e.g like 4 a 5 polygons
-2. create and select a new empty Layer in JOSM and Copy (CTRL-C) - Paste (ALT-CTRL-V) the selected polygons (or OPT-CMD-V on Mac)
-3. this copies the selected Polygons into the new Layer, preserving the geometries
-4. look how the polygons align with the basemap, you may move points, delete points and/or use `SimplifyArea` (SHIFT-CTRL-y)
-5. also best to fill "holes" (inner in multipolygons) where they are houses, at least non-natural landcover, maybe also small water bodies
-6. download OSM data of the area around the polygons in a separate layer (or maybe in the same layer..)
-7. merge the polygon layer into the OSM data layer
-8. now the conflation steps starts: try to merge with existing data, never blindly remove existing data, always look at PNOA
-9. finally upload, possibly with hashtag `#ES-SIOSE-import`.
-10. if possible, check with "boots on the ground": walk to the imported areas and use StreetComplete to retag 
+1. open JOSM, best add the supporting Layers, by opening [josm-siose-starter.jos](siose2osm/josm-siose-starter.jos)
+2. LOAD - load the municipality `.osm` file, here `18187.osm`. Layer name is `18187.osm`
+3. SELECT - look on the map (OSM Carto) and PNOA Aerial for some polygons bordering each other, select these, here 3 polygons.
+
+<img width="1024" height="672" alt="image" src="docs/src/assets/images/josm-work-select.jpg" />
+
+4. OSM DATA - download OSM data of the area around the polygons in a separate layer called `OSM` here.
+5. create and select a new empty Layer `SIOSE_SELECTION` in JOSM 
+6. Copy (CTRL-C) - Paste (CTRL-ALT-V) the selected polygons (or CMD-C and CMD-OPT-V on Mac)
+7. this copies the selected Polygons into the new `SIOSE_SELECTION` Layer, preserving the geometries
+8. look how the polygons align with the basemap, you may move points, delete points and/or use `SimplifyArea` (SHIFT-CTRL-Y)
+9. also best to fill "holes" (inner in multipolygons) where they are houses, at least non-natural landcover, maybe also small water bodies
+
+<img width="1024" height="672" alt="image" src="docs/src/assets/images/josm-work-edit.jpg" />
+
+10. merge the `SIOSE_SELECTION` layer into the `OSM` layer
+11. CONFLATE - now the conflation steps starts: try to merge with existing data, never blindly remove existing data, always look at PNOA
+
+<img width="1024" height="672" alt="image" src="docs/src/assets/images/josm-work-conflate.jpg" />
+
+11. finally upload the `OSM` layer, possibly with hashtag `#ES-SIOSE-IMPORT`. See the result for the three polygons:
+
+<img width="1024" height="776" alt="image" src="docs/src/assets/images/josm-work-result.jpg" />
+
+
+12. POST-EDIT - if possible, check with "boots on the ground": walk to the imported areas and use StreetComplete to retag 
 
 ## Workflow in Id
 
