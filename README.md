@@ -228,12 +228,21 @@ This is a workflow I have followed after some experimentation:
 1. look on the map (OSM Carto) and PNOA Aerial for some polygons bordering each other, select these, e.g like 4 a 5 polygons
 2. create and select a new empty Layer in JOSM and Copy (CTRL-C) - Paste (ALT-CTRL-V) the selected polygons (or OPT-CMD-V on Mac)
 3. this copies the selected Polygons into the new Layer, preserving the geometries
-4. look how the polygons align with the basemap, you may move point, also in cased delete points and/or use `SimplifyArea` (SHIFT-CTRL-y)
-5. download OSM data of the area around the polygons in a separate layer (or maybe in the same layer..)
-6. merge the polygon layer into the OSM data layer
-7. now the conflation steps starts: try to merge with existing data, never blindly remove existing data, always look at PNOA
-8. finally upload, possibly with hashtag `#ES-SIOSE-import`.
-9. if possible, check with "boots on the ground": walk to the imported areas and use StreetComplete to retag 
+4. look how the polygons align with the basemap, you may move points, delete points and/or use `SimplifyArea` (SHIFT-CTRL-y)
+5. also best to fill "holes" (inner in multipolygons) where they are houses, at least non-natural landcover, maybe also small water bodies
+6. download OSM data of the area around the polygons in a separate layer (or maybe in the same layer..)
+7. merge the polygon layer into the OSM data layer
+8. now the conflation steps starts: try to merge with existing data, never blindly remove existing data, always look at PNOA
+9. finally upload, possibly with hashtag `#ES-SIOSE-import`.
+10. if possible, check with "boots on the ground": walk to the imported areas and use StreetComplete to retag 
 
+## Workflow in Id
 
+It is also possible to import in Id, but this is without the `.osm` files. 
+You can add the following "Custom Layer" (capa personal):
+`https://servicios.idee.es/wms-inspire/ocupacion-suelo?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=true&LAYERS=LC.LandCoverSurfaces&CRS={proj}&BBOX={bbox}&HEIGHT={height}&WIDTH={width}&STYLES=`
 
+Then you can draw polygons. To know the OSM tags, you can see them in the `.osm` file in QGIS, as in picture below as QGIS allows loading .osm files.
+Add a "Vector Layer" in QGIS and select the file like `18187.osm` above. (note the same polygon is selected).
+
+<img width="1024" height="559" alt="image" src="docs/src/assets/images/qgis-osm-file.jpg" />
