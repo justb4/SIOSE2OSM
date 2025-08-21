@@ -6,7 +6,7 @@ src_ID_COBERTURA_MAX,COBERTURA_DESC_ES,COBERTURA_DESC_EN,osm_skip,osm_source,osm
 106,Balsas y estanques,Ponds and ponds,X,SIOSE,,,,,,,,,,
 111,Otras construcciones,Other constructions,X,SIOSE,,,,,,,,,,
 112,Construcción deportiva,Sports facilities,,SIOSE,,,,sports_centre,,,,,,
-121,Suelo no edificado,Undeveloped land,,SIOSE,wasteland,,,,,,,,,
+121,Suelo no edificado,Undeveloped land,,SIOSE,brownfield,,,,,,,,,
 122,Zona abierta,Open area,X,SIOSE,brownfield,,,,,,,,,
 132,Zonas de extracción,Extraction areas,,SIOSE,quarry,,,,,,,,,
 133,Zonas de vertido,Discharge areas,,SIOSE,landfill,,,,,,,,,
