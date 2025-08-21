@@ -3,10 +3,22 @@
 This is a PoC (Proof of Concept) to test the feasiblity to establish a basic workflow for import of Spain's Landcover dataset , "SIOSE AR" (Alto Reso, hi-res, scale 1:1000-1:5000m) from SIOSE into OpenStreetMap. 
 The outcome and content of this repository is basically a toolchain `SIOSE2OSM` that takes raw SIOSE data and extracts, translates to per-municipality OSM-files (`.osm`) to be opened in JOSM.
 
-*NB this process is not yet executed, need discussion and refinement with the OSM-ES Community, SIOSE (for licensing waiver) and OSM DWG for import permission.*
+*NB this process is not yet executed, need discussion and refinement with the OSM-ES Community.*
 *See [proposal on OSM-ES Forum](https://community.openstreetmap.org/t/uso-de-siose-landuse-landcover-para-openstreetmap/134392/1).*
 
 ## Source data (GPKG per province)
+
+SIOSE data is licensed CC-BY-4.0. OpenStreetMap has permission from IGN to download and use SIOSE data, as per a letter.
+See [OSM Wiki for details](https://wiki.openstreetmap.org/wiki/ES:Fuentes_de_datos_potenciales_de_Espa%C3%B1a#Datos_de_cobertura_nacional).
+
+<img width="934" height="498" alt="image" src="docs/src/assets/images/ign-siose-lic-waiver.jpg" />
+
+Download: go to https://centrodedescargas.cnig.es/ and fill in "SIOSE AR" in search box. 
+SIOSE AR ("Alto Resolucíon" i.e. High Resolution) is the most detailed the latest now from 2016-2018.
+
+There are like *"Total ficheros SIOSE AR : 106"*. The data is divided among 53 mainly provinces, with 
+two formats for each: ESRI GDB and OGC GeoPackage (GPKG). Obviously we choose GPKG.
+In the example below we will download the Province of Granada and then extract a small municipality called "Válor".
 
 Link for Granada: https://centrodedescargas.cnig.es/CentroDescargas/detalleArchivo?sec=11599572#
 
@@ -24,7 +36,7 @@ Sistema de Referencia Geodésico: ETRS89 en la Península
 
 Download into the `siose2osm/data` directory and unzip.
 Move the file `18_GRANADA.gpkg` to `siose2osm/data` and remove .zip and other content.
-The `siose2osm/data` dir is where we work in. This is also ignored by git.
+The `siose2osm/data` dir is where we work in. This directory is also ignored by git.
 
 ## Open GeoPackage for Municipality in QGIS and Download Layer
 
@@ -199,3 +211,27 @@ Useful baselayers:
 Result in JOSM (note that we select the same polygon as in the QGIS screenshot above!):
 
 <img width="1488" height="936" alt="image" src="docs/src/assets/images/josm-load-osm.jpg" />
+
+## Workflow in JOSM
+
+*This is still experimental and ongoing!*
+
+**For one thing: this data as initially opened as separate layer in JOSM should never be uploaded directly to OSM!**
+
+Within JOSM I have at least the following plugins: utilsplugin2, todo, SimplifyArea.
+
+The biggest issue with importing is "Conflation", dealing with existing LandUse, LandCover, mostly from CORINE imports.
+Like with Spanish buildings import we should go almost polygon-by-polygon (piecemeal import) 
+and always match with PNOA Aerial Imagery, i.e. what you see on the ground.
+
+This is a workflow I have followed after some experimentation:
+
+1. look on the map (OSM Carto) and PNOA Aerial for some polygons bordering each other, select these, e.g like 4 a 5 polygons
+2. create and select a new empty Layer in JOSM and Copy (CTRL-C) - Paste (ALT-CTRL-V) the selected polygons (or OPT-CMD-V on Mac)
+3. this copies the selected Polygons into the new Layer, preserving the geometries
+4. look how the polygons align with the basemap, you may move point, also in cased delete points and/or use `SimplifyArea` (SHIFT-CTRL-y)
+5. download OSM data of the area around the polygons in a separate layer (or maybe in the same layer..)
+6. merge the polygon layer into the OSM data layer
+7. now the conflation steps starts: try to merge with existing data, never blindly remove existing data, always look at PNOA
+8. finally upload, posibly with hashtag `#ES-SIOSE-import`.
+
