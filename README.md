@@ -10,8 +10,7 @@ The outcome and content of this repository is basically a toolchain `SIOSE2OSM` 
 
 SIOSE data is licensed CC-BY-4.0. OpenStreetMap has permission from IGN to download and use SIOSE data, as per a letter.
 See [OSM Wiki for details](https://wiki.openstreetmap.org/wiki/ES:Fuentes_de_datos_potenciales_de_Espa%C3%B1a#Datos_de_cobertura_nacional).
-
-<img width="934" height="498" alt="image" src="docs/src/assets/images/ign-siose-lic-waiver.jpg" />
+And/or see this text excerpt: [ign-siose-lic-waiver.jpg](docs/src/assets/images/ign-siose-lic-waiver.jpg).
 
 Download: go to https://centrodedescargas.cnig.es/ and fill in "SIOSE AR" in search box. 
 SIOSE AR ("Alto Resolucíon" i.e. High Resolution) is the most detailed the latest now from 2016-2018.
@@ -233,5 +232,8 @@ This is a workflow I have followed after some experimentation:
 5. download OSM data of the area around the polygons in a separate layer (or maybe in the same layer..)
 6. merge the polygon layer into the OSM data layer
 7. now the conflation steps starts: try to merge with existing data, never blindly remove existing data, always look at PNOA
-8. finally upload, posibly with hashtag `#ES-SIOSE-import`.
+8. finally upload, possibly with hashtag `#ES-SIOSE-import`.
+9. if possible, check with "boots on the ground": walk to the imported areas and use StreetComplete to retag 
+
+
 
