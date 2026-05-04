@@ -256,7 +256,7 @@ This is a workflow I have followed after some experimentation:
 
 It is also possible to import in Id, but this is without the `.osm` files. 
 You can add the following "Custom Layer" (capa personal):
-`https://servicios.idee.es/wms-inspire/ocupacion-suelo?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image/png&TRANSPARENT=true&LAYERS=LC.LandCoverSurfaces&CRS={proj}&BBOX={bbox}&HEIGHT={height}&WIDTH={width}&STYLES=`
+`https://servicios.idee.es/wmts/ocupacion-suelo?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&FORMAT=image/png&LAYER=LC.LandCoverSurfaces&TILEMATRIXSET=EPSG:3857&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&STYLE=`
 
 Then you can draw polygons. To know the OSM tags, you can see them in the `.osm` file in QGIS, as in picture below as QGIS allows loading .osm files.
 Add a "Vector Layer" in QGIS and select the file like `18187.osm` above. (note the same polygon is selected).
